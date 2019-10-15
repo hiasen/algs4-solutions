@@ -1,0 +1,11 @@
+plugins {
+    id 'groovy'
+}
+apply plugin: 'groovy'
+repositories {
+    jcenter()
+}
+dependencies {
+    implementation localGroovy()
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+}

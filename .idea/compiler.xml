@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="algs4-solutions.percolation.interactive-percolation-visualizer.main" target="1.8" />
+      <module name="algs4-solutions.percolation.interactive-percolation-visualizer.test" target="1.8" />
+      <module name="algs4-solutions.percolation.percolation-visualizer.main" target="1.8" />
+      <module name="algs4-solutions.percolation.percolation-visualizer.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
