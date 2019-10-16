@@ -5,8 +5,8 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
  */
 public class Percolation {
 
-    private static final int topSite = 0;
-    private static final int bottomSite = 1;
+    private static final int TOP_SITE = 0;
+    private static final int BOTTOM_SITE = 1;
 
     private final int n;
     private final WeightedQuickUnionUF uf;
@@ -35,18 +35,21 @@ public class Percolation {
     }
 
     private void checkRange(int row, int col) {
-        if (row <= 0 || row > n || col <= 0 || col > n) {
+        if (!isInRange(row, col)) {
             throw new IllegalArgumentException();
         }
+    }
+    private boolean isInRange(int row, int col) {
+        return row >= 1 && row <= n && col >= 1 && col <= n;
     }
 
     private void unionNeighborSites(int row, int col) {
         int site = getSite(row, col);
-        if (row <= 1) {
-            uf.union(site, topSite);
+        if (row == 1) {
+            uf.union(site, TOP_SITE);
         }
-        if (row >= n) {
-            uf.union(site, bottomSite);
+        if (row == n) {
+            uf.union(site, BOTTOM_SITE);
         }
         tryUnion(site, row - 1, col);
         tryUnion(site, row + 1, col);
@@ -54,11 +57,8 @@ public class Percolation {
         tryUnion(site, row, col + 1);
     }
     private void tryUnion(int site, int row, int col) {
-        try {
-            if (isOpen(row, col)) {
-                uf.union(site, getSite(row, col));
-            }
-        } catch (IllegalArgumentException ignored) {
+        if (isInRange(row, col) && isOpen(row, col)) {
+            uf.union(site, getSite(row, col));
         }
     }
     private int getSite(int row, int col) {
@@ -67,13 +67,13 @@ public class Percolation {
     }
 
     public boolean isFull(int row, int col) {
-        return uf.connected(topSite, getSite(row, col));
+        return uf.connected(TOP_SITE, getSite(row, col));
     }
     public int numberOfOpenSites() {
         return numOpenedSites;
     }
     public boolean percolates() {
-        return uf.connected(topSite, bottomSite);
+        return uf.connected(TOP_SITE, BOTTOM_SITE);
     }
 }
 

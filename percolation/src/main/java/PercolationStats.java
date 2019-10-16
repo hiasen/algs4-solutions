@@ -6,6 +6,7 @@ import edu.princeton.cs.algs4.StdStats;
  *
  */
 public class PercolationStats {
+    private static final double CONFIDENCE_95 = 1.96;
     private final int n;
     private final int trials;
     private final double xbar;
@@ -54,10 +55,10 @@ public class PercolationStats {
     }
 
     public double confidenceLo() {
-        return xbar - 1.96*s/Math.sqrt(trials);
+        return xbar - CONFIDENCE_95*s/Math.sqrt(trials);
     }
 
     public double confidenceHi() {
-        return xbar + 1.96*s/Math.sqrt(trials);
+        return xbar + CONFIDENCE_95*s/Math.sqrt(trials);
     }
 }
