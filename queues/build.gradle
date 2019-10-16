@@ -1,0 +1,19 @@
+test {
+    useJUnitPlatform()
+}
+
+def zipLocation = "${buildDir}/queues.zip"
+def suppliedProjectFolder = "$buildDir/suppliedProject"
+
+
+task downloadZipFile(type: Download) {
+    url = 'https://coursera.cs.princeton.edu/algs4/assignments/queues/queues.zip'
+    dest = zipLocation
+}
+
+task unpack(type: Copy) {
+    dependsOn downloadZipFile
+    from zipTree(zipLocation)
+    exclude ".idea/"
+    into suppliedProjectFolder
+}
