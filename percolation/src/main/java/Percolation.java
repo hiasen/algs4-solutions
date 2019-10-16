@@ -1,9 +1,12 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
+/**
+ * Implements the Percolation data type.
+ */
 public class Percolation {
 
-    static private final int topSite = 0;
-    static private final int bottomSite = 1;
+    private static final int topSite = 0;
+    private static final int bottomSite = 1;
 
     private final int n;
     private final WeightedQuickUnionUF uf;
@@ -15,20 +18,20 @@ public class Percolation {
             throw new IllegalArgumentException();
         }
         this.n = n;
-        uf = new WeightedQuickUnionUF(n*n+2);
+        uf = new WeightedQuickUnionUF(n * n + 2);
         opened = new boolean[n][n];
     }
 
     public void open(int row, int col) {
         if (!isOpen(row, col)) {
-            opened[row-1][col-1] = true;
+            opened[row - 1][col - 1] = true;
             numOpenedSites++;
             unionNeighborSites(row, col);
         }
     }
     public boolean isOpen(int row, int col) {
         checkRange(row, col);
-        return opened[row-1][col-1];
+        return opened[row - 1][col - 1];
     }
 
     private void checkRange(int row, int col) {
@@ -39,31 +42,38 @@ public class Percolation {
 
     private void unionNeighborSites(int row, int col) {
         int site = getSite(row, col);
-        if (row == 1) {
+        if (row <= 1) {
             uf.union(site, topSite);
-        } else if (isOpen(row-1, col)){
-            uf.union(site, getSite(row-1, col));
         }
-        if (row == n) {
+        if (row >= n) {
             uf.union(site, bottomSite);
-        } else if (isOpen(row+1, col)) {
-            uf.union(site, getSite(row+1, col));
         }
-        if (col != 1 && isOpen(row, col-1)) {
-            uf.union(site, getSite(row, col-1));
-        }
-        if (col != n && isOpen(row, col+1)) {
-            uf.union(site, getSite(row, col+1));
+        tryUnion(site, row - 1, col);
+        tryUnion(site, row + 1, col);
+        tryUnion(site, row, col - 1);
+        tryUnion(site, row, col + 1);
+    }
+    private void tryUnion(int site, int row, int col) {
+        try {
+            if (isOpen(row, col)) {
+                uf.union(site, getSite(row, col));
+            }
+        } catch (IllegalArgumentException ignored) {
         }
     }
-
     private int getSite(int row, int col) {
         checkRange(row, col);
-        return (row-1) * n +col+1;
+        return (row - 1) * n + col + 1;
     }
 
-    public boolean isFull(int row, int col) { return uf.connected(topSite, getSite(row, col)); }
-    public int numberOfOpenSites() { return numOpenedSites; }
-    public boolean percolates() { return uf.connected(topSite, bottomSite); }
+    public boolean isFull(int row, int col) {
+        return uf.connected(topSite, getSite(row, col));
+    }
+    public int numberOfOpenSites() {
+        return numOpenedSites;
+    }
+    public boolean percolates() {
+        return uf.connected(topSite, bottomSite);
+    }
 }
 

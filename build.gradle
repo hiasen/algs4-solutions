@@ -1,13 +1,15 @@
 plugins {
     id 'java'
     id 'idea'
-   // id 'checkstyle'
     id "com.github.spotbugs" version "2.0.0"
+    id 'checkstyle'
 }
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'com.github.spotbugs'
+    apply plugin: 'pmd'
+    apply plugin: 'checkstyle'
     //apply plugin: 'checkstyle'
     sourceCompatibility = 1.8
     repositories {
@@ -17,5 +19,16 @@ subprojects {
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
         implementation 'edu.princeton.cs:algs4:1.0.4'
+    }
+
+    spotbugs {
+        excludeFilter new File("${rootDir}/config/algs4-spotbugs-filter.xml")
+    }
+    pmd {
+        toolVersion "6.3.0"
+        ruleSetFiles = files("${rootDir}/config/pmd.xml")
+    }
+    checkstyle {
+        toolVersion "8.25"
     }
 }
