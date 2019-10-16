@@ -43,3 +43,9 @@ task('runPercolationVisualizer', type: JavaExec) {
     classpath = sourceSets.supplied.runtimeClasspath
     main = 'PercolationVisualizer'
 }
+
+task('zipSolution', type: Zip) {
+    archiveFileName = "solution.zip"
+    destinationDirectory = file("$buildDir/")
+    from "$projectDir/src/main/java"
+}
