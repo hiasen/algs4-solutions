@@ -4,11 +4,12 @@ test {
 }
 
 def zipLocation = "${buildDir}/percolation.zip"
-def suppliedCodeFolder = "${buildDir}/suppliedCode"
+def suppliedProjectFolder = "$buildDir/suppliedProject"
+
 sourceSets {
     supplied {
         java {
-            srcDir suppliedCodeFolder
+            srcDir suppliedProjectFolder
         }
     }
 }
@@ -17,34 +18,31 @@ dependencies {
     suppliedImplementation 'edu.princeton.cs:algs4:1.0.4'
 }
 
-import Download
-import ExtractFilesFromZip
 
-task('downloadZipFile', type: Download) {
+task downloadZipFile(type: Download) {
     url = 'https://coursera.cs.princeton.edu/algs4/assignments/percolation/percolation.zip'
     dest = zipLocation
 }
 
-task('extractSourceFiles', type: ExtractFilesFromZip) {
+task unpack(type: Copy) {
     dependsOn downloadZipFile
-    zipArchive = zipLocation
-    dest = suppliedCodeFolder
-    filenames = ["PercolationVisualizer.java", "InteractivePercolationVisualizer.java"]
+    from zipTree(zipLocation)
+    exclude ".idea/"
+    into suppliedProjectFolder
 }
-
-task('runInteractivePercolationVisualizer', type: JavaExec) {
-    dependsOn extractSourceFiles
+task runInteractivePercolationVisualizer(type: JavaExec) {
+    dependsOn unpack
     classpath = sourceSets.supplied.runtimeClasspath
     main = 'InteractivePercolationVisualizer'
 }
 
-task('runPercolationVisualizer', type: JavaExec) {
-    dependsOn extractSourceFiles
+task runPercolationVisualizer(type: JavaExec) {
+    dependsOn unpack
     classpath = sourceSets.supplied.runtimeClasspath
     main = 'PercolationVisualizer'
 }
 
-task('zipSolution', type: Zip) {
+task zipSolution(type: Zip) {
     archiveFileName = "solution.zip"
     destinationDirectory = file("$buildDir/")
     from "$projectDir/src/main/java"
