@@ -6,6 +6,8 @@
       <module name="algs4-solutions.percolation.interactive-percolation-visualizer.test" target="1.8" />
       <module name="algs4-solutions.percolation.percolation-visualizer.main" target="1.8" />
       <module name="algs4-solutions.percolation.percolation-visualizer.test" target="1.8" />
+      <module name="algs4-solutions.percolation.supplied" target="1.8" />
+      <module name="algs4-solutions.percolation.t" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

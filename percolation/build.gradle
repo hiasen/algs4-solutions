@@ -5,11 +5,17 @@ test {
 
 def zipLocation = "${buildDir}/percolation.zip"
 def suppliedProjectFolder = "$buildDir/suppliedProject"
+def suppliedInputFiles = "$buildDir/inputfiles"
 
 sourceSets {
     supplied {
         java {
             srcDir suppliedProjectFolder
+        }
+    }
+    test {
+        resources {
+            srcDir suppliedInputFiles
         }
     }
 }
@@ -30,6 +36,25 @@ task unpack(type: Copy) {
     exclude ".idea/"
     into suppliedProjectFolder
 }
+
+task copyPercolatingTestFiles(type: Copy) {
+    dependsOn unpack
+    from suppliedProjectFolder
+    into "$suppliedInputFiles/percolates"
+    include "*.txt"
+    exclude "*-no.txt", 'greeting57.txt', "heart25.txt"
+}
+
+task copyNotPercolatingTestFiles(type: Copy) {
+    dependsOn unpack
+    from suppliedProjectFolder
+    into "$suppliedInputFiles/nopercolates"
+    include "*-no.txt", 'greeting57.txt', 'heart25.txt'
+}
+task copyTestFiles() {
+    dependsOn copyPercolatingTestFiles, copyNotPercolatingTestFiles
+}
+
 
 compileSuppliedJava {
     dependsOn unpack
