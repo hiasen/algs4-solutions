@@ -30,14 +30,19 @@ task unpack(type: Copy) {
     exclude ".idea/"
     into suppliedProjectFolder
 }
-task runInteractivePercolationVisualizer(type: JavaExec) {
+
+compileSuppliedJava {
     dependsOn unpack
+}
+
+task runInteractivePercolationVisualizer(type: JavaExec) {
+    dependsOn compileSuppliedJava
     classpath = sourceSets.supplied.runtimeClasspath
     main = 'InteractivePercolationVisualizer'
 }
 
 task runPercolationVisualizer(type: JavaExec) {
-    dependsOn unpack
+    dependsOn compileSuppliedJava
     classpath = sourceSets.supplied.runtimeClasspath
     main = 'PercolationVisualizer'
 }
