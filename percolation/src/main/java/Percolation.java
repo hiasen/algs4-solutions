@@ -10,6 +10,7 @@ public class Percolation {
 
     private final int n;
     private final WeightedQuickUnionUF uf;
+    private final WeightedQuickUnionUF ufWithoutBottomSite;
     private final boolean[][] opened;
     private int numOpenedSites = 0;
 
@@ -19,6 +20,8 @@ public class Percolation {
         }
         this.n = n;
         uf = new WeightedQuickUnionUF(n * n + 2);
+        ufWithoutBottomSite = new WeightedQuickUnionUF(n * n + 2);
+
         opened = new boolean[n][n];
     }
 
@@ -47,18 +50,20 @@ public class Percolation {
         int site = getSite(row, col);
         if (row == 1) {
             uf.union(site, TOP_SITE);
+            ufWithoutBottomSite.union(site, TOP_SITE);
         }
         if (row == n) {
             uf.union(site, BOTTOM_SITE);
         }
-        tryUnion(site, row - 1, col);
-        tryUnion(site, row + 1, col);
-        tryUnion(site, row, col - 1);
-        tryUnion(site, row, col + 1);
+        unionIfInRangeAndOpen(site, row - 1, col);
+        unionIfInRangeAndOpen(site, row + 1, col);
+        unionIfInRangeAndOpen(site, row, col - 1);
+        unionIfInRangeAndOpen(site, row, col + 1);
     }
-    private void tryUnion(int site, int row, int col) {
+    private void unionIfInRangeAndOpen(int site, int row, int col) {
         if (isInRange(row, col) && isOpen(row, col)) {
             uf.union(site, getSite(row, col));
+            ufWithoutBottomSite.union(site, getSite(row, col));
         }
     }
     private int getSite(int row, int col) {
@@ -67,7 +72,7 @@ public class Percolation {
     }
 
     public boolean isFull(int row, int col) {
-        return uf.connected(TOP_SITE, getSite(row, col));
+        return ufWithoutBottomSite.connected(TOP_SITE, getSite(row, col));
     }
     public int numberOfOpenSites() {
         return numOpenedSites;

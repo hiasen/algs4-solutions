@@ -6,7 +6,7 @@ import org.junit.jupiter.api.function.Executable;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class PercolationTest {
+class PercolationTest {
 
     void assertThrowsIllegalArgument(Executable thunk) {
         assertThrows(IllegalArgumentException.class, thunk);
@@ -88,5 +88,22 @@ public class PercolationTest {
         percolation.open(2,3);
         percolation.open(3,3);
         assertTrue(percolation.percolates());
+    }
+
+    @Test
+    void backwash() {
+        // Test for recreating the backwash-bug
+        Percolation p = new Percolation(3);
+        p.open(1,1);
+        p.open(2, 1);
+        p.open(3,1);
+        assertTrue(p.percolates());
+
+        p.open(3,3);
+        assertFalse(p.isFull(3,3));
+
+        p.open(2,3);
+        p.open(1, 3);
+        assertTrue(p.isFull(3,3));
     }
 }
