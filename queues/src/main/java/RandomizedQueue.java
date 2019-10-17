@@ -1,3 +1,4 @@
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
@@ -91,6 +92,34 @@ public class RandomizedQueue<Item> implements Iterable<Item>{
                 return item;
             }
             throw new NoSuchElementException();
+        }
+    }
+    public static void main(String[] args) {
+        RandomizedQueue<Integer> rq = new RandomizedQueue<>();
+        while (rq.size() < 10) {
+            rq.enqueue(StdRandom.uniform(100));
+        }
+        int n = 4;
+        StdOut.printf("\nSample %d elements from the queue:\n", n);
+        for (int i = 0; i < n; i++) {
+            StdOut.println(rq.sample());
+        }
+        StdOut.printf("\nDequeuing %d elements from the queue\n", n);
+        for (int i = 0; i < n; i++) {
+            StdOut.println(rq.dequeue());
+        }
+
+        StdOut.println("\nIterate through the remaining elements concurrently with two iterators.");
+
+        Iterator<Integer> it1 = rq.iterator();
+        Iterator<Integer> it2 = rq.iterator();
+        while (it1.hasNext()) {
+            StdOut.printf("%d %d\n", it1.next(), it2.next());
+        }
+
+        StdOut.println("\nDequeue the rest of the elements");
+        while (!rq.isEmpty()) {
+            StdOut.println(rq.dequeue());
         }
     }
 }
