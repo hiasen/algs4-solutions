@@ -17,3 +17,11 @@ task unpack(type: Copy) {
     exclude ".idea/"
     into suppliedProjectFolder
 }
+
+task runPermutation(type: JavaExec) {
+    dependsOn compileJava, unpack
+    classpath sourceSets.main.runtimeClasspath
+    main = "Permutation"
+    args "3"
+    standardInput new FileInputStream("$suppliedProjectFolder/permutation4.txt")
+}
