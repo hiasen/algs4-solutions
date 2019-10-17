@@ -8,7 +8,7 @@ public class Deque<Item> implements Iterable<Item> {
     private Node<Item> lastNode = null;
     private int dequeSize = 0;
 
-    static class Node<Item> {
+    private static class Node<Item> {
         Item item;
         Node<Item> next;
         Node<Item> previous;

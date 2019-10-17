@@ -9,7 +9,7 @@ public class RandomizedQueue<Item> implements Iterable<Item>{
     private Item[] items;
     private int count = 0;
 
-    RandomizedQueue() {
+    public RandomizedQueue() {
         items = createArray(MINIMUM_CAPACITY);
     }
 
