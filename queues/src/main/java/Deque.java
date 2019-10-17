@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.StdOut;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -114,6 +116,33 @@ public class Deque<Item> implements Iterable<Item> {
         @Override
         public void remove() {
             throw new UnsupportedOperationException();
+        }
+    }
+
+    public static void main(String[] args) {
+        Deque<Integer> deque = new Deque<>();
+        int n = 0;
+        while (deque.size() < 4) {
+            deque.addFirst(n++);
+        }
+        while (deque.size() < 8) {
+            deque.addLast(n++);
+        }
+        while (deque.size() < 16) {
+            deque.addFirst(n++);
+            deque.addLast(n++);
+        }
+        StdOut.println("\nPrint entire deque using iterator");
+        for (int x: deque) {
+            StdOut.println(x);
+        }
+        StdOut.printf("\nRemove two from front and one from back\n");
+        while (deque.size() >= 3) {
+            StdOut.printf("%d %d %d\n", deque.removeFirst(), deque.removeFirst(), deque.removeLast());
+        }
+        StdOut.printf("\nRemove rest (if any)\n");
+        while (!deque.isEmpty()) {
+            StdOut.println(deque.removeFirst());
         }
     }
 }
