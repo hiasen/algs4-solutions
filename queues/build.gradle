@@ -25,3 +25,10 @@ task runPermutation(type: JavaExec) {
     args "3"
     standardInput new FileInputStream("$suppliedProjectFolder/permutation4.txt")
 }
+
+
+task zipSolution(type: Zip) {
+    archiveFileName = "solution.zip"
+    destinationDirectory = file("$buildDir/")
+    from "$projectDir/src/main/java"
+}
