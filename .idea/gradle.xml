@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/collinear" />
             <option value="$PROJECT_DIR$/percolation" />
             <option value="$PROJECT_DIR$/queues" />
           </set>

@@ -1,3 +1,5 @@
 rootProject.name = 'algs4-solutions'
 include 'percolation'
 include 'queues'
+include 'collinear'
+
