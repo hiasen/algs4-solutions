@@ -1,16 +1,14 @@
 plugins {
-    id 'java'
-    id 'idea'
-    id "com.github.spotbugs" version "2.0.0"
-    id 'checkstyle'
+    id "com.github.spotbugs" version "2.0.0" apply false
 }
+
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'com.github.spotbugs'
     apply plugin: 'pmd'
     apply plugin: 'checkstyle'
-    //apply plugin: 'checkstyle'
+
     sourceCompatibility = 1.8
     repositories {
         jcenter()
@@ -19,6 +17,10 @@ subprojects {
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
         implementation 'edu.princeton.cs:algs4:1.0.4'
+    }
+
+    test {
+        useJUnitPlatform()
     }
 
     spotbugs {
@@ -31,4 +33,26 @@ subprojects {
     checkstyle {
         toolVersion "8.25"
     }
+
+    ext.zipLocation = "$buildDir/${project.name}.zip"
+    ext.suppliedProjectFolder = "$buildDir/suppliedProject"
+
+    task downloadZipFile(type: Download) {
+        url = "https://coursera.cs.princeton.edu/algs4/assignments/${project.name}/${project.name}.zip"
+        dest = zipLocation
+    }
+
+    task unpack(type: Copy) {
+        dependsOn downloadZipFile
+        from zipTree(zipLocation)
+        exclude ".idea/"
+        into suppliedProjectFolder
+    }
+
+    task zipSolution(type: Zip) {
+        archiveFileName = "solution.zip"
+        destinationDirectory = file("$buildDir/")
+        from "$projectDir/src/main/java"
+    }
+
 }

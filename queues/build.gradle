@@ -1,23 +1,5 @@
-test {
-    useJUnitPlatform()
-}
 
-def zipLocation = "${buildDir}/queues.zip"
-def suppliedProjectFolder = "$buildDir/suppliedProject"
-
-
-task downloadZipFile(type: Download) {
-    url = 'https://coursera.cs.princeton.edu/algs4/assignments/queues/queues.zip'
-    dest = zipLocation
-}
-
-task unpack(type: Copy) {
-    dependsOn downloadZipFile
-    from zipTree(zipLocation)
-    exclude ".idea/"
-    into suppliedProjectFolder
-}
-
+/*
 task runPermutation(type: JavaExec) {
     dependsOn compileJava, unpack
     classpath sourceSets.main.runtimeClasspath
@@ -25,10 +7,4 @@ task runPermutation(type: JavaExec) {
     args "3"
     standardInput new FileInputStream("$suppliedProjectFolder/permutation4.txt")
 }
-
-
-task zipSolution(type: Zip) {
-    archiveFileName = "solution.zip"
-    destinationDirectory = file("$buildDir/")
-    from "$projectDir/src/main/java"
-}
+*/

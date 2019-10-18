@@ -1,21 +1,10 @@
 
-test {
-    useJUnitPlatform()
-}
-
-def zipLocation = "${buildDir}/percolation.zip"
-def suppliedProjectFolder = "$buildDir/suppliedProject"
-def suppliedInputFiles = "$buildDir/inputfiles"
-
+// Build configuration for building and running the supplied java code,
+// PercolationVisualizer.java and InteractivePercolationVisualizer.java
 sourceSets {
     supplied {
         java {
             srcDir suppliedProjectFolder
-        }
-    }
-    test {
-        resources {
-            srcDir suppliedInputFiles
         }
     }
 }
@@ -23,20 +12,30 @@ dependencies {
     suppliedImplementation project(":percolation")
     suppliedImplementation 'edu.princeton.cs:algs4:1.0.4'
 }
-
-
-task downloadZipFile(type: Download) {
-    url = 'https://coursera.cs.princeton.edu/algs4/assignments/percolation/percolation.zip'
-    dest = zipLocation
+compileSuppliedJava {
+    dependsOn unpack
+}
+task runInteractivePercolationVisualizer(type: JavaExec) {
+    dependsOn compileSuppliedJava
+    classpath = sourceSets.supplied.runtimeClasspath
+    main = 'InteractivePercolationVisualizer'
+}
+task runPercolationVisualizer(type: JavaExec) {
+    dependsOn compileSuppliedJava
+    classpath = sourceSets.supplied.runtimeClasspath
+    main = 'PercolationVisualizer'
 }
 
-task unpack(type: Copy) {
-    dependsOn downloadZipFile
-    from zipTree(zipLocation)
-    exclude ".idea/"
-    into suppliedProjectFolder
-}
 
+// Add supplied test files to a resource folder for some tests.
+ext.suppliedInputFiles = "$buildDir/inputfiles"
+sourceSets {
+    test {
+        resources {
+            srcDir suppliedInputFiles
+        }
+    }
+}
 task copyPercolatingTestFiles(type: Copy) {
     dependsOn unpack
     from suppliedProjectFolder
@@ -44,7 +43,6 @@ task copyPercolatingTestFiles(type: Copy) {
     include "*.txt"
     exclude "*-no.txt", 'greeting57.txt', "heart25.txt"
 }
-
 task copyNotPercolatingTestFiles(type: Copy) {
     dependsOn unpack
     from suppliedProjectFolder
@@ -53,27 +51,4 @@ task copyNotPercolatingTestFiles(type: Copy) {
 }
 task copyTestFiles() {
     dependsOn copyPercolatingTestFiles, copyNotPercolatingTestFiles
-}
-
-
-compileSuppliedJava {
-    dependsOn unpack
-}
-
-task runInteractivePercolationVisualizer(type: JavaExec) {
-    dependsOn compileSuppliedJava
-    classpath = sourceSets.supplied.runtimeClasspath
-    main = 'InteractivePercolationVisualizer'
-}
-
-task runPercolationVisualizer(type: JavaExec) {
-    dependsOn compileSuppliedJava
-    classpath = sourceSets.supplied.runtimeClasspath
-    main = 'PercolationVisualizer'
-}
-
-task zipSolution(type: Zip) {
-    archiveFileName = "solution.zip"
-    destinationDirectory = file("$buildDir/")
-    from "$projectDir/src/main/java"
 }
