@@ -1,16 +1,11 @@
-/******************************************************************************
- *  Compilation:  javac Point.java
- *  Execution:    java Point
- *  Dependencies: none
- *  
- *  An immutable data type for points in the plane.
- *  For use on Coursera, Algorithms Part I programming assignment.
- *
- ******************************************************************************/
-
 import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
 
+/**
+ *  An immutable data type for points in the plane.
+ *  For use on Coursera, Algorithms Part I programming assignment.
+ *
+ */
 public class Point implements Comparable<Point> {
 
     private final int x;     // x-coordinate of this point
