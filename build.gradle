@@ -29,6 +29,7 @@ subprojects {
     pmd {
         toolVersion "6.3.0"
         ruleSetFiles = files("${rootDir}/config/pmd.xml")
+        ruleSets = []
     }
     checkstyle {
         toolVersion "8.25"
