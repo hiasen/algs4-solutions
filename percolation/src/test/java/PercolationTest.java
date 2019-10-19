@@ -9,7 +9,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class PercolationTest {
 
     void assertThrowsIllegalArgument(Executable thunk) {
-        assertThrows(IllegalArgumentException.class, thunk);
+        assertThrows(IllegalArgumentException.class, thunk, "Should throw IllegalArgumentException");
+    }
+    void assertPercolates(Percolation percolation) {
+        assertTrue(percolation.percolates(), "This system should percolate.");
     }
 
     @Test
@@ -93,7 +96,7 @@ class PercolationTest {
         Percolation percolation = new Percolation(n);
         for (int row = 1; row <= n; row++) {
             for (int col = 1; col <= n; col++) {
-                assertFalse(percolation.isOpen(row, col));
+                assertFalse(percolation.isOpen(row, col), "Site should not be open");
             }
         }
     }
@@ -101,31 +104,31 @@ class PercolationTest {
     @Test
     void numberOfSites_IsZero_IfNewlyCreatedPercolation() {
         Percolation percolation = new Percolation(10);
-        assertEquals(0, percolation.numberOfOpenSites());
+        assertEquals(0, percolation.numberOfOpenSites(), "Number of open sites should be zero.");
     }
     @Test
     void numberOfSites_IsOne_AfterOpeningOneSite() {
         Percolation percolation = new Percolation(10);
         percolation.open(1, 1);
-        assertEquals(1, percolation.numberOfOpenSites());
+        assertEquals(1, percolation.numberOfOpenSites(), "numberOfOpenSites should be one.");
     }
     @Test
     void isOpen_True_AfterOpeningTheSite() {
         Percolation percolation = new Percolation(10);
         percolation.open(1, 1);
-        assertTrue(percolation.isOpen(1,1));
+        assertTrue(percolation.isOpen(1,1), "The site should be open.");
     }
     @Test
     void percolates_false_IfNoOpenedSites() {
         Percolation percolation = new Percolation(10);
-        assertFalse(percolation.percolates());
+        assertPercolates(percolation);
     }
 
     @Test
     void Should_percolate_When_OpenedSiteInSystemWithOnlyOneSite() {
         Percolation percolation = new Percolation(1);
         percolation.open(1,1);
-        assertTrue(percolation.percolates());
+        assertPercolates(percolation);
     }
 
     @Test
@@ -135,7 +138,7 @@ class PercolationTest {
         percolation.open(2,2);
         percolation.open(1,2);
 
-        assertTrue(percolation.percolates());
+        assertPercolates(percolation);
     }
 
     @Test
@@ -146,7 +149,7 @@ class PercolationTest {
         percolation.open(2,2);
         percolation.open(2,3);
         percolation.open(3,3);
-        assertTrue(percolation.percolates());
+        assertPercolates(percolation);
     }
 
     @Test
@@ -157,6 +160,6 @@ class PercolationTest {
         p.open(2, 1);
         p.open(3,1);
         p.open(3,3);
-        assertFalse(p.isFull(3,3));
+        assertFalse(p.isFull(3,3), "This site should not be full.");
     }
 }

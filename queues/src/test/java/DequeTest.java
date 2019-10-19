@@ -1,131 +1,137 @@
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DequeTest {
+    private Deque<Integer> deque;
+
+    @BeforeEach
+    void createDeque() {
+        deque = new Deque<>();
+    }
+
     @Test
-    void constructDeque() {
-        new Deque<Integer>();
+    void addFirst_ThrowsIllegalArgumentException_When_SuppliedNull() {
+        assertThrows(IllegalArgumentException.class, () -> deque.addFirst(null),
+                "Trying to add null to deque is illegal.");
     }
     @Test
-    void illegalArgumentExceptionOnNullArgument() {
-        Deque<Integer> deque = new Deque<>();
-        assertThrows(IllegalArgumentException.class, () -> deque.addFirst(null));
-        assertThrows(IllegalArgumentException.class, () -> deque.addLast(null));
+    void addLast_ThrowsIllegalArgumentException_When_SuppliedNull() {
+        assertThrows(IllegalArgumentException.class, () -> deque.addLast(null),
+                "Trying to add null to deque is illegal.");
+    }
+
+    @Test
+    void removeFirst_ThrowsException_When_DequeIsEmpty() {
+        assertThrows(NoSuchElementException.class, deque::removeFirst,
+                "Exception should be raised when trying to remove element from empty deque.");
     }
     @Test
-    void noElementInNewDeque() {
-        Deque<Integer> deque = new Deque<>();
-        assertThrows(NoSuchElementException.class, deque::removeFirst);
-        assertThrows(NoSuchElementException.class, deque::removeLast);
+    void removeLast_ThrowsException_When_DequeIsEmpty() {
+        assertThrows(NoSuchElementException.class, deque::removeLast,
+                "Exception should be raised when trying to remove element from empty deque.");
     }
     @Test
     void newDequeIsEmpty() {
-        Deque<Integer> deque = new Deque<>();
-        assertTrue(deque.isEmpty());
-        assertEquals(0, deque.size());
+        assertTrue(deque.isEmpty(), "A new deque should be empty.");
+    }
+    @Test
+    void newDequeHasZeroSize() {
+        assertEquals(0, deque.size(), "Size of a new deque should be 0.");
     }
 
     @Test
-    void isIterator() {
-        for (Integer x: new Deque<Integer>()) {
-            fail();
-        }
-        Iterator<Integer> it = new Deque<Integer>().iterator();
-        assertThrows(NoSuchElementException.class, it::next);
-        assertThrows(UnsupportedOperationException.class, it::remove);
+    void dequeIsIterable() {
+        assertDoesNotThrow(deque::iterator, "Calling iterator on deque should not throw exceptions.");
+    }
+    @Test
+    void nextOnEmptyIteratorThrowsNoSuchElementException() {
+        assertThrows(NoSuchElementException.class, deque.iterator()::next,
+                "Calling next on empty iterator should throw exception.");
+
+    }
+    @Test
+    void dequeIteratorDoesNotSupportRemove() {
+        assertThrows(UnsupportedOperationException.class, deque.iterator()::remove,
+                "remove on iterator should throw exception.");
     }
 
     @Test
-    void addAndRemoveOneItemToFront() {
-        Deque<Integer> deque = new Deque<>();
+    void addFirst_ResultsIn_DequeNonEmpty() {
         deque.addFirst(100);
-        assertFalse(deque.isEmpty());
-        assertEquals(1, deque.size());
+        assertFalse(deque.isEmpty(), "Deque should be nonempty.");
+    }
+    @Test
+    void addLast_ResultsIn_DequeNonEmpty() {
+        deque.addLast(100);
+        assertFalse(deque.isEmpty(), "Deque should be nonempty.");
+    }
+    @Test
+    void addingOneItemResultsInDequeSizeOfOne() {
+        deque.addFirst(100);
+        assertEquals(1, deque.size(), "Deque should have size of one.");
+    }
+    @Test
+    void addLastResultsInDequeSizeOfOne() {
+        deque.addLast(100);
+        assertEquals(1, deque.size(), "Deque should have size of one.");
+    }
 
-        assertEquals(100, deque.removeFirst());
-        assertTrue(deque.isEmpty());
-        assertEquals(0, deque.size());
+    @Test
+    void addAndRemoveOneItemInFront() {
+        deque.addFirst(100);
+        assertEquals(100, deque.removeFirst(), "Removed item should equal what was added.");
     }
 
     @Test
     void addAndRemoveOneItemToBack() {
-        Deque<Integer> deque = new Deque<>();
         deque.addLast(100);
-        assertFalse(deque.isEmpty());
-        assertEquals(1, deque.size());
-
-        assertEquals(100, deque.removeLast());
-        assertTrue(deque.isEmpty());
-        assertEquals(0, deque.size());
+        assertEquals(100, deque.removeLast(), "Removed item should equal what was added.");
     }
 
     @Test
     void addFirstRemoveLast() {
-        Deque<Integer> deque = new Deque<>();
         deque.addFirst(100);
-        assertEquals(100, deque.removeLast());
-        assertTrue(deque.isEmpty());
+        assertEquals(100, deque.removeLast(), "Removed item should equal what was added.");
     }
     @Test
     void addLastRemoveFirst() {
-        Deque<Integer> deque = new Deque<>();
         deque.addLast(100);
-        assertEquals(100, deque.removeFirst());
-        assertTrue(deque.isEmpty());
+        assertEquals(100, deque.removeFirst(), "Removed item should equal what was added.");
     }
 
     @Test
-    void addFirstTwoItems() {
-        Deque<Integer> deque = new Deque<>();
-        deque.addFirst(1);
-        deque.addFirst(2);
-        assertEquals(2, deque.size());
-        assertEquals(2, deque.removeFirst());
-        assertEquals(1, deque.size());
-        assertEquals(1, deque.removeFirst());
-        assertTrue(deque.isEmpty());
-        assertEquals(0, deque.size());
-    }
-
-    @Test
+    @SuppressWarnings("PMD.JUnitTestContainsTooManyAsserts")
     void stackLikeFront() {
-        Deque<Integer> deque = new Deque<>();
-        deque.addFirst(1);
-        deque.addFirst(2);
-        deque.addFirst(3);
-        deque.addFirst(4);
+        for (int i = 0; i <= 4; i++) {
+            deque.addFirst(i);
+        }
 
-        assertEquals(4, deque.removeFirst());
-        assertEquals(3, deque.removeFirst());
-        assertEquals(2, deque.removeFirst());
-        assertEquals(1, deque.removeFirst());
-
-        assertTrue(deque.isEmpty());
+        for (int i = 4; i >= 0; i--) {
+            assertEquals(i, deque.removeFirst(), "Elements should come in reverse order.");
+        }
+        assertTrue(deque.isEmpty(), "Deque should be empty.");
     }
 
     @Test
+    @SuppressWarnings("PMD.JUnitTestContainsTooManyAsserts")
     void stackLikeBack() {
-        Deque<Integer> deque = new Deque<>();
-        deque.addLast(1);
-        deque.addLast(2);
-        deque.addLast(3);
-        deque.addLast(4);
+        for (int i = 0; i <= 4; i++) {
+            deque.addLast(i);
+        }
 
-        assertEquals(4, deque.removeLast());
-        assertEquals(3, deque.removeLast());
-        assertEquals(2, deque.removeLast());
-        assertEquals(1, deque.removeLast());
+        for (int i = 4; i >= 0; i--) {
+            assertEquals(i, deque.removeLast(), "Elements should come in reverse order.");
+        }
 
-        assertTrue(deque.isEmpty());
+        assertTrue(deque.isEmpty(), "Deque should be empty.");
     }
 
     @Test
+    @SuppressWarnings("PMD.JUnitTestContainsTooManyAsserts")
     void iteration() {
-        Deque<Integer> deque = new Deque<>();
 
         deque.addLast(2);
         deque.addLast(3);
@@ -134,11 +140,9 @@ class DequeTest {
 
         int y = 1;
         for (int x: deque) {
-            assertEquals(x, y);
+            assertEquals(x, y, "Deque should contain integers increasing one by one.");
             y++;
         }
-        assertEquals(5, y);
-
+        assertEquals(5, y, "The for loop should have run.");
     }
-
 }

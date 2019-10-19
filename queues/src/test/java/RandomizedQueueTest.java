@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
@@ -6,32 +7,49 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RandomizedQueueTest {
+    private RandomizedQueue<Integer> rq;
+
+    @BeforeEach
+    void createRandomizedQueue() {
+        rq = new RandomizedQueue<>();
+    }
+
+    void assertIsEmpty() {
+        assertTrue(rq.isEmpty(), "RandomizedQueue should be empty.");
+    }
 
     @Test
-    void newRandomizedQueue() {
-        RandomizedQueue rq = new RandomizedQueue();
-        assertTrue(rq.isEmpty());
-        assertEquals(0, rq.size());
+    void newRandomizedQueueIsEmpty() {
+        assertIsEmpty();
     }
     @Test
-    void enqueueOnce() {
-        RandomizedQueue<Integer> rq = new RandomizedQueue<>();
+    void newRandomizedQueueHasSizeZero() {
+        assertEquals(0, rq.size(), "Should have size zero.");
+    }
+    @Test
+    void enqueueOnceNonEmpty() {
         rq.enqueue(1);
-        assertFalse(rq.isEmpty());
-        assertEquals(1, rq.size());
-        assertEquals(1, rq.sample());
-        assertEquals(1, rq.sample());
+        assertFalse(rq.isEmpty(), "Should be nonempty.");
+    }
+    @Test
+    void enqueueOnceSizeIsOne() {
+        rq.enqueue(1);
+        assertEquals(1, rq.size(), "Size should be 1.");
+    }
+    @Test
+    void callingSampleTwiceGivesSameResultForOnlyOneValueInQueue() {
+        rq.enqueue(1);
+        assertEquals(rq.sample(), rq.sample(), "Both samples should be equal.");
     }
     @Test
     void enqueueThenDequeue() {
-        RandomizedQueue<Integer> rq = new RandomizedQueue<>();
         rq.enqueue(1);
-        assertEquals(1, rq.dequeue());
+        assertEquals(1, rq.dequeue(), "Dequeue should equal what was enqueued.");
     }
     @Test
     void enqueueManyElements() {
-        RandomizedQueue<Integer> rq = new RandomizedQueue<>();
-        int n = 17;
+        final int n = 17;
+        final int correctSum = n*(n+1)/2;
         for (int i = 1; i <= n; i++) {
             rq.enqueue(i);
         }
@@ -39,14 +57,12 @@ class RandomizedQueueTest {
         while (!rq.isEmpty()) {
             sum += rq.dequeue();
         }
-        assertEquals(n*(n+1), 2*sum);
+        assertEquals(correctSum, sum, "Sum should be independent of order of dequeued values.");
     }
 
     @Test
     void iterator() {
-        RandomizedQueue<Integer> rq = new RandomizedQueue<>();
-        int n = 17;
-        for (int i = 1; i <= n; i++) {
+        for (int i = 1; i <= 17; i++) {
             rq.enqueue(i);
         }
         int sum1 = 0;
@@ -57,25 +73,34 @@ class RandomizedQueueTest {
             sum1 += it1.next();
             sum2 += it2.next();
         }
-        assertEquals(sum1, sum2);
+        assertEquals(sum1, sum2, "Sums should be equal.");
     }
 
     @Test
-    void throwsTheCorrectExceptions() {
-        RandomizedQueue<Integer> rq = new RandomizedQueue<>();
+    void sample_ThrowsException_When_QueueIsEmpty() {
         assertThrows(NoSuchElementException.class, rq::sample);
+    }
+    @Test
+    void dequeue_ThrowsException_When_QueueIsEmpty() {
         assertThrows(NoSuchElementException.class, rq::dequeue);
+    }
+    @Test
+    void enqueue_ThrowsException_When_GivenNull() {
         assertThrows(IllegalArgumentException.class, () -> rq.enqueue(null));
-
-        Iterator<Integer> it = rq.iterator();
-        assertThrows(NoSuchElementException.class, it::next);
-        assertThrows(UnsupportedOperationException.class, it::remove);
-
+    }
+    @Test
+    void iteratorNext_ThrowsException_When_Empty() {
+        assertThrows(NoSuchElementException.class, rq.iterator()::next,
+                "Next should throw exception on empty iterator.");
+    }
+    @Test
+    void removeMethodIsNotSupportedOnIterator() {
+        assertThrows(UnsupportedOperationException.class, rq.iterator()::remove,
+                "Remove should throw UnsupportedOperationException.");
     }
 
     @Test
     void emptyQueueAndAddAgain() {
-        RandomizedQueue<Integer> rq = new RandomizedQueue<>();
         rq.enqueue(1);
         rq.enqueue(1);
         rq.enqueue(1);
@@ -86,6 +111,6 @@ class RandomizedQueueTest {
         rq.dequeue();
         rq.enqueue(1);
         rq.dequeue();
-
+        assertIsEmpty();
     }
 }
