@@ -97,8 +97,26 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        /* YOUR CODE HERE */
-        return null;
+        return new SlopeComparator(this);
+    }
+
+    private static class SlopeComparator implements Comparator<Point> {
+        private Point comparePoint;
+        SlopeComparator(Point point) {
+            this.comparePoint = point;
+        }
+
+        @Override
+        public int compare(Point point1, Point point2) {
+            double slope1 = comparePoint.slopeTo(point1);
+            double slope2 = comparePoint.slopeTo(point2);
+            return Double.compare(slope1, slope2);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("SlopeComparator<%s>", comparePoint);
+        }
     }
 
 
