@@ -1,11 +1,12 @@
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+
 
 class TestPercolationUsingSuppliedTestFiles {
     private final static String PERCOLATE_FOLDER = "percolates";
@@ -15,18 +16,21 @@ class TestPercolationUsingSuppliedTestFiles {
     void percolating() {
         String folder = getClass().getResource(PERCOLATE_FOLDER).getFile();
         File[] files = new File(folder).listFiles();
-        if (files == null) return;
-        for (File tada: files) {
-            assertTrue(runPercolation(tada), tada.getAbsolutePath());
+        if (files != null) {
+            for (File file : files) {
+                assertTrue(runPercolation(file), file.getAbsolutePath());
+            }
         }
     }
+
     @Test
     void notPercolating() {
         String folder = getClass().getResource(NOPERCOLATE_FOLDER).getFile();
         File[] files = new File(folder).listFiles();
-        if (files == null) return;
-        for (File tada: files) {
-            assertFalse(runPercolation(tada), tada.getAbsolutePath());
+        if (files != null) {
+            for (File file : files) {
+                assertFalse(runPercolation(file), file.getAbsolutePath());
+            }
         }
     }
 

@@ -1,8 +1,8 @@
-import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.NoSuchElementException;
+import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class DequeTest {
     private Deque<Integer> deque;
@@ -17,6 +17,7 @@ class DequeTest {
         assertThrows(IllegalArgumentException.class, () -> deque.addFirst(null),
                 "Trying to add null to deque is illegal.");
     }
+
     @Test
     void addLast_ThrowsIllegalArgumentException_When_SuppliedNull() {
         assertThrows(IllegalArgumentException.class, () -> deque.addLast(null),
@@ -28,15 +29,18 @@ class DequeTest {
         assertThrows(NoSuchElementException.class, deque::removeFirst,
                 "Exception should be raised when trying to remove element from empty deque.");
     }
+
     @Test
     void removeLast_ThrowsException_When_DequeIsEmpty() {
         assertThrows(NoSuchElementException.class, deque::removeLast,
                 "Exception should be raised when trying to remove element from empty deque.");
     }
+
     @Test
     void newDequeIsEmpty() {
         assertTrue(deque.isEmpty(), "A new deque should be empty.");
     }
+
     @Test
     void newDequeHasZeroSize() {
         assertEquals(0, deque.size(), "Size of a new deque should be 0.");
@@ -46,12 +50,14 @@ class DequeTest {
     void dequeIsIterable() {
         assertDoesNotThrow(deque::iterator, "Calling iterator on deque should not throw exceptions.");
     }
+
     @Test
     void nextOnEmptyIteratorThrowsNoSuchElementException() {
         assertThrows(NoSuchElementException.class, deque.iterator()::next,
                 "Calling next on empty iterator should throw exception.");
 
     }
+
     @Test
     void dequeIteratorDoesNotSupportRemove() {
         assertThrows(UnsupportedOperationException.class, deque.iterator()::remove,
@@ -63,16 +69,19 @@ class DequeTest {
         deque.addFirst(100);
         assertFalse(deque.isEmpty(), "Deque should be nonempty.");
     }
+
     @Test
     void addLast_ResultsIn_DequeNonEmpty() {
         deque.addLast(100);
         assertFalse(deque.isEmpty(), "Deque should be nonempty.");
     }
+
     @Test
     void addingOneItemResultsInDequeSizeOfOne() {
         deque.addFirst(100);
         assertEquals(1, deque.size(), "Deque should have size of one.");
     }
+
     @Test
     void addLastResultsInDequeSizeOfOne() {
         deque.addLast(100);
@@ -96,6 +105,7 @@ class DequeTest {
         deque.addFirst(100);
         assertEquals(100, deque.removeLast(), "Removed item should equal what was added.");
     }
+
     @Test
     void addLastRemoveFirst() {
         deque.addLast(100);

@@ -1,10 +1,13 @@
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+
+
 
 class RandomizedQueueTest {
     private RandomizedQueue<Integer> rq;
@@ -22,34 +25,40 @@ class RandomizedQueueTest {
     void newRandomizedQueueIsEmpty() {
         assertIsEmpty();
     }
+
     @Test
     void newRandomizedQueueHasSizeZero() {
         assertEquals(0, rq.size(), "Should have size zero.");
     }
+
     @Test
     void enqueueOnceNonEmpty() {
         rq.enqueue(1);
         assertFalse(rq.isEmpty(), "Should be nonempty.");
     }
+
     @Test
     void enqueueOnceSizeIsOne() {
         rq.enqueue(1);
         assertEquals(1, rq.size(), "Size should be 1.");
     }
+
     @Test
     void callingSampleTwiceGivesSameResultForOnlyOneValueInQueue() {
         rq.enqueue(1);
         assertEquals(rq.sample(), rq.sample(), "Both samples should be equal.");
     }
+
     @Test
     void enqueueThenDequeue() {
         rq.enqueue(1);
         assertEquals(1, rq.dequeue(), "Dequeue should equal what was enqueued.");
     }
+
     @Test
     void enqueueManyElements() {
         final int n = 17;
-        final int correctSum = n*(n+1)/2;
+        final int correctSum = n * (n + 1) / 2;
         for (int i = 1; i <= n; i++) {
             rq.enqueue(i);
         }
@@ -80,19 +89,23 @@ class RandomizedQueueTest {
     void sample_ThrowsException_When_QueueIsEmpty() {
         assertThrows(NoSuchElementException.class, rq::sample);
     }
+
     @Test
     void dequeue_ThrowsException_When_QueueIsEmpty() {
         assertThrows(NoSuchElementException.class, rq::dequeue);
     }
+
     @Test
     void enqueue_ThrowsException_When_GivenNull() {
         assertThrows(IllegalArgumentException.class, () -> rq.enqueue(null));
     }
+
     @Test
     void iteratorNext_ThrowsException_When_Empty() {
         assertThrows(NoSuchElementException.class, rq.iterator()::next,
                 "Next should throw exception on empty iterator.");
     }
+
     @Test
     void removeMethodIsNotSupportedOnIterator() {
         assertThrows(UnsupportedOperationException.class, rq.iterator()::remove,
