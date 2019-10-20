@@ -125,7 +125,7 @@ class PercolationTest {
     @Test
     void percolates_false_IfNoOpenedSites() {
         Percolation percolation = new Percolation(10);
-        assertPercolates(percolation);
+        assertFalse(percolation.percolates(), "A new percolation system should not percolate.");
     }
 
     @Test
