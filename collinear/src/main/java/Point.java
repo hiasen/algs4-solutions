@@ -1,5 +1,5 @@
-import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
+import java.util.Comparator;
 
 /**
  *  An immutable data type for points in the plane.
@@ -70,9 +70,16 @@ public class Point implements Comparable<Point> {
      *         point; and a positive integer if this point is greater than the
      *         argument point
      */
+
+    @Override
     public int compareTo(Point that) {
-        /* YOUR CODE HERE */
-        return 0;
+        if (y < that.y) {
+            return -1;
+        }
+        if (y > that.y) {
+            return 1;
+        }
+       return Integer.compare(x, that.x);
     }
 
     /**
@@ -94,6 +101,7 @@ public class Point implements Comparable<Point> {
      *
      * @return a string representation of this point
      */
+    @Override
     public String toString() {
         /* DO NOT MODIFY */
         return "(" + x + ", " + y + ")";
