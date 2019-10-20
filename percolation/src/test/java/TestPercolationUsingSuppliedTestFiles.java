@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class TestPercolationUsingSuppliedTestFiles {
 
     private boolean runPercolation(File file) {
         try {
-            Scanner sc = new Scanner(file);
+            Scanner sc = new Scanner(file, StandardCharsets.UTF_8.name());
             int n = sc.nextInt();
             Percolation p = new Percolation(n);
             while (sc.hasNext()) {
