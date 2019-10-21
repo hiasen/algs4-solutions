@@ -54,7 +54,10 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
-        if (x == that.x ) {
+        if (that == null) {
+            throw new IllegalArgumentException("Argument to slopeTo method can't be null.");
+        }
+        if (x == that.x) {
             if (y == that.y) {
                 return Double.NEGATIVE_INFINITY;
             }
@@ -87,7 +90,7 @@ public class Point implements Comparable<Point> {
         if (y > that.y) {
             return 1;
         }
-       return Integer.compare(x, that.x);
+        return Integer.compare(x, that.x);
     }
 
     /**
@@ -101,7 +104,8 @@ public class Point implements Comparable<Point> {
     }
 
     private static class SlopeComparator implements Comparator<Point> {
-        private Point comparePoint;
+        private final Point comparePoint;
+
         SlopeComparator(Point point) {
             this.comparePoint = point;
         }

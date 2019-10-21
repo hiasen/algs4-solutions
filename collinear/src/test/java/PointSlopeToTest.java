@@ -57,4 +57,9 @@ class PointSlopeToTest {
                 "Should have slope of -1.");
     }
 
+    @Test
+    void testOtherPointIsNull() {
+        Point point = new Point(1, 2);
+        assertThrows(IllegalArgumentException.class, () -> point.slopeTo(null));
+    }
 }

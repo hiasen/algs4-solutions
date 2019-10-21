@@ -1,27 +1,33 @@
-import java.util.ArrayList;
-
 import static java.util.Collections.max;
 import static java.util.Collections.min;
+
+import java.util.ArrayList;
 
 /**
  * Finds all LineSegments of at least 4 collinear points
  * using a brute force method.
  */
 public class BruteForceCollinearPoints {
-    private LineSegment[] lineSegments;
+    private final ArrayList<LineSegment> lineSegmentArrayList = new ArrayList<>();
+
     /**
      * Find collinear points given array of distinct points.
      * @param points The distinct points to investigate.
      */
     public BruteForceCollinearPoints(Point[] points) {
-        ArrayList<LineSegment> lineSegments2 = new ArrayList<>();
+        if (points == null) {
+            throw new IllegalArgumentException("Point array should not be null.");
+        }
         for (int i = 0; i < points.length; i++) {
             Point p = points[i];
-            for (int j = i+1; j < points.length; j++) {
+            if (p == null) {
+                throw new IllegalArgumentException("Points in the array should be non null.");
+            }
+            for (int j = i + 1; j < points.length; j++) {
                 double slope1 = p.slopeTo(points[j]);
-                for (int k = j+1; k < points.length; k++) {
+                for (int k = j + 1; k < points.length; k++) {
                     double slope2 = p.slopeTo(points[k]);
-                    for (int l = k+1; l < points.length; l++) {
+                    for (int l = k + 1; l < points.length; l++) {
                         double slope3 = p.slopeTo(points[k]);
                         if (slope1 == slope2 && slope1 == slope3) {
                             ArrayList<Point> pointsOnLine = new ArrayList<>();
@@ -29,14 +35,12 @@ public class BruteForceCollinearPoints {
                             pointsOnLine.add(points[j]);
                             pointsOnLine.add(points[k]);
                             pointsOnLine.add(points[l]);
-                            lineSegments2.add(new LineSegment(min(pointsOnLine), max(pointsOnLine)));
+                            lineSegmentArrayList.add(new LineSegment(min(pointsOnLine), max(pointsOnLine)));
                         }
                     }
                 }
             }
         }
-        lineSegments = new LineSegment[lineSegments2.size()];
-        lineSegments2.toArray(lineSegments);
     }
 
     /**
@@ -44,10 +48,17 @@ public class BruteForceCollinearPoints {
      * @return int
      */
     public int numberOfSegments() {
-        return lineSegments.length;
+        return lineSegmentArrayList.size();
     }
 
+    /**
+     * Get array of line segments.
+     * @return Array of line segments
+     */
     public LineSegment[] segments() {
+        LineSegment[] lineSegments = new LineSegment[lineSegmentArrayList.size()];
+        lineSegmentArrayList.toArray(lineSegments);
         return lineSegments;
+
     }
 }
