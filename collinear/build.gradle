@@ -1,0 +1,19 @@
+
+ext.extraMainSource = "$buildDir/extra-source/"
+
+task DownloadLineSegment(type: Download) {
+    url "https://coursera.cs.princeton.edu/algs4/assignments/collinear/files/LineSegment.java"
+    dest "$extraMainSource/LineSegment.java"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir extraMainSource
+        }
+    }
+}
+
+compileJava {
+    dependsOn DownloadLineSegment
+}
