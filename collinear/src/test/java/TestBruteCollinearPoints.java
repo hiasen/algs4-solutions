@@ -2,7 +2,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class TestBruteForceCollinearPoints {
+class TestBruteCollinearPoints {
 
     private Point[] createCollinearPoints() {
         Point[] points = new Point[4];
@@ -15,21 +15,21 @@ class TestBruteForceCollinearPoints {
     @Test
     void test() {
         Point[] points = createCollinearPoints();
-        BruteForceCollinearPoints bruteForceCollinearPoints = new BruteForceCollinearPoints(points);
-        int numSeq = bruteForceCollinearPoints.numberOfSegments();
+        BruteCollinearPoints bruteCollinearPoints = new BruteCollinearPoints(points);
+        int numSeq = bruteCollinearPoints.numberOfSegments();
         assertEquals(1, numSeq, "Numer of line segments should be 1.");
-        LineSegment[] lineSegments = bruteForceCollinearPoints.segments();
+        LineSegment[] lineSegments = bruteCollinearPoints.segments();
     }
 
     @Test
     void argumentToConstructorIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> new BruteForceCollinearPoints(null),
+        assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(null),
                 "Null in argument to BruteForceCollinearPoints constructor should throw exceptions.");
     }
 
     @Test
     void nullInPointsArray() {
         Point[] points = new Point[10];
-        assertThrows(IllegalArgumentException.class, () -> new BruteForceCollinearPoints(points));
+        assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(points));
     }
 }

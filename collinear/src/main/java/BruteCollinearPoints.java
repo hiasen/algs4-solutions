@@ -7,14 +7,14 @@ import java.util.ArrayList;
  * Finds all LineSegments of at least 4 collinear points
  * using a brute force method.
  */
-public class BruteForceCollinearPoints {
+public class BruteCollinearPoints {
     private final ArrayList<LineSegment> lineSegmentArrayList = new ArrayList<>();
 
     /**
      * Find collinear points given array of distinct points.
      * @param points The distinct points to investigate.
      */
-    public BruteForceCollinearPoints(Point[] points) {
+    public BruteCollinearPoints(Point[] points) {
         if (points == null) {
             throw new IllegalArgumentException("Point array should not be null.");
         }
