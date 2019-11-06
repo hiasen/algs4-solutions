@@ -60,6 +60,6 @@ class PointSlopeToTest {
     @Test
     void testOtherPointIsNull() {
         Point point = new Point(1, 2);
-        assertThrows(IllegalArgumentException.class, () -> point.slopeTo(null));
+        assertThrows(NullPointerException.class, () -> point.slopeTo(null));
     }
 }

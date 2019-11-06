@@ -55,7 +55,7 @@ public class Point implements Comparable<Point> {
      */
     public double slopeTo(Point that) {
         if (that == null) {
-            throw new IllegalArgumentException("Argument to slopeTo method can't be null.");
+            throw new NullPointerException("Argument to slopeTo method can't be null.");
         }
         if (x == that.x) {
             if (y == that.y) {

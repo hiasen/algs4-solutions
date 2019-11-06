@@ -1,5 +1,4 @@
-import static java.util.Collections.max;
-import static java.util.Collections.min;
+import java.util.Collections;
 
 import java.util.ArrayList;
 
@@ -18,24 +17,29 @@ public class BruteCollinearPoints {
         if (points == null) {
             throw new IllegalArgumentException("Point array should not be null.");
         }
-        for (int i = 0; i < points.length; i++) {
-            Point p = points[i];
+        for (Point p: points) {
             if (p == null) {
                 throw new IllegalArgumentException("Points in the array should be non null.");
             }
+        }
+        for (int i = 0; i < points.length; i++) {
+            Point p = points[i];
             for (int j = i + 1; j < points.length; j++) {
+                if (points[i].compareTo(points[j]) == 0) {
+                    throw new IllegalArgumentException("There should be no duplicate points.");
+                }
                 double slope1 = p.slopeTo(points[j]);
                 for (int k = j + 1; k < points.length; k++) {
                     double slope2 = p.slopeTo(points[k]);
                     for (int l = k + 1; l < points.length; l++) {
-                        double slope3 = p.slopeTo(points[k]);
+                        double slope3 = p.slopeTo(points[l]);
                         if (slope1 == slope2 && slope1 == slope3) {
                             ArrayList<Point> pointsOnLine = new ArrayList<>();
                             pointsOnLine.add(points[i]);
                             pointsOnLine.add(points[j]);
                             pointsOnLine.add(points[k]);
                             pointsOnLine.add(points[l]);
-                            lineSegmentArrayList.add(new LineSegment(min(pointsOnLine), max(pointsOnLine)));
+                            lineSegmentArrayList.add(new LineSegment(Collections.min(pointsOnLine), Collections.max(pointsOnLine)));
                         }
                     }
                 }

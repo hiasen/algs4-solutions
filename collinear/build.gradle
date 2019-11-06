@@ -17,3 +17,14 @@ sourceSets {
 compileJava {
     dependsOn DownloadLineSegment
 }
+
+sourceSets {
+    client {
+
+    }
+}
+
+dependencies {
+    clientImplementation 'edu.princeton.cs:algs4:1.0.4'
+    clientImplementation project(':collinear')
+}
