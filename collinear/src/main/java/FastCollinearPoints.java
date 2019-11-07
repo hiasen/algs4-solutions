@@ -6,7 +6,8 @@ import java.util.Arrays;
  * Find collinear points.
  */
 public class FastCollinearPoints {
-    private final ArrayList<LineSegment> lineSegmentArrayList = new ArrayList<>();
+    private ArrayList<MyLineSegment> lineSegmentArrayList = new ArrayList<>();
+    private LineSegment[] lineSegments;
 
     /**
      * Find collinear points given array of distinct points.
@@ -17,24 +18,33 @@ public class FastCollinearPoints {
         if (points == null) {
             throw new IllegalArgumentException("Point array should not be null.");
         }
-        for (int i = 0; i < points.length; i++) {
-            if (points[i] == null) {
+        for (Point p: points) {
+            if (p == null) {
                 throw new IllegalArgumentException("Points in the array should be non null.");
             }
-            findLineSegmentsWithGivenOrigin(i, points);
         }
+        Point[] sortedPoints = points.clone();
+        Arrays.sort(sortedPoints);
+        for (int i = 0; i < sortedPoints.length - 1; i++) {
+            if (sortedPoints[i].compareTo(sortedPoints[i+1]) == 0) {
+                throw new IllegalArgumentException("Duplicate points!");
+            }
+        }
+        for (Point point : points) {
+            Arrays.sort(sortedPoints, point.slopeOrder());
+            findLineSegmentsWithGivenOrigin(point, sortedPoints);
+        }
+        makeUnique();
+        createSegmentsArray();
     }
 
-    private void findLineSegmentsWithGivenOrigin(int originIndex, Point[] points) {
-        final Point origin = points[originIndex];
-        Arrays.sort(points, originIndex+1, points.length, origin.slopeOrder());
+    private void findLineSegmentsWithGivenOrigin(Point origin, Point[] points) {
 
-        for (int index = originIndex+1; index < points.length;) {
+        for (int index = 0; index < points.length;) {
             Point min = origin;
             Point max = origin;
-            int firstInSegment = index;
+            final int firstInSegment = index;
             final double firstSlope = origin.slopeTo(points[firstInSegment]);
-
 
             while (index < points.length && origin.slopeTo(points[index]) == firstSlope) {
                 Point p = points[index];
@@ -47,9 +57,56 @@ public class FastCollinearPoints {
                 index++;
             }
             if (index - firstInSegment >= 3) {
-                lineSegmentArrayList.add(new LineSegment(min, max));
+                MyLineSegment newSegment = new MyLineSegment(min, max);
+                lineSegmentArrayList.add(newSegment);
             }
         }
+    }
+
+    static private class MyLineSegment implements Comparable<MyLineSegment> {
+        Point p;
+        Point q;
+        MyLineSegment(Point p, Point q) {
+            this.p = p;
+            this.q = q;
+        }
+        LineSegment toLineSegment() {
+            return new LineSegment(p, q);
+        }
+
+        @Override
+        public int compareTo(MyLineSegment myLineSegment) {
+            int a = p.compareTo(myLineSegment.p);
+            if (a != 0) {
+                return a;
+            }
+            return q.compareTo(myLineSegment.q);
+        }
+    }
+
+    private void makeUnique() {
+        if (lineSegmentArrayList.size() == 0) {
+            return;
+        }
+        ArrayList<MyLineSegment> unique = new ArrayList<>();
+        lineSegmentArrayList.sort(null);
+        MyLineSegment last = lineSegmentArrayList.get(0);
+        unique.add(last);
+        for (MyLineSegment ls: lineSegmentArrayList) {
+            if (ls.compareTo(last) != 0) {
+                last = ls;
+                unique.add(last);
+            }
+        }
+        lineSegmentArrayList = unique;
+    }
+
+    private void createSegmentsArray() {
+        lineSegments = new LineSegment[lineSegmentArrayList.size()];
+        for (int i = 0; i < lineSegments.length; i++) {
+            lineSegments[i] = lineSegmentArrayList.get(i).toLineSegment();
+        }
+        lineSegmentArrayList.clear();
     }
 
     /**
@@ -57,7 +114,7 @@ public class FastCollinearPoints {
      * @return int
      */
     public int numberOfSegments() {
-        return lineSegmentArrayList.size();
+        return lineSegments.length;
     }
 
     /**
@@ -65,9 +122,6 @@ public class FastCollinearPoints {
      * @return Array of line segments
      */
     public LineSegment[] segments() {
-        LineSegment[] lineSegments = new LineSegment[lineSegmentArrayList.size()];
-        lineSegmentArrayList.toArray(lineSegments);
-        return lineSegments;
-
+        return lineSegments.clone();
     }
 }

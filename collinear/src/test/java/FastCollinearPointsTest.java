@@ -15,13 +15,14 @@ class FastCollinearPointsTest {
         return points;
     }
     @Test
-    void fafa() {
+    void four_collinear_points() {
         FastCollinearPoints fastCollinearPoints = new FastCollinearPoints(createCollinearPoints());
         assertEquals(1, fastCollinearPoints.numberOfSegments());
     }
 
     @Test
-    void asdfaswdf() {
-
+    void five_collinear_points() {
+        FastCollinearPoints fastCollinearPoints = new FastCollinearPoints(createCollinearPoints(0, 0, 1, 1, 5));
+        assertEquals(1, fastCollinearPoints.numberOfSegments());
     }
 }
